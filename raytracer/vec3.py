@@ -5,12 +5,15 @@ class vec3:
     def __init__(self, e0=0.0, e1=0.0, e2=0.0):
         self.e = [e0, e1, e2]
 
+    @property
     def x(self):
         return self.e[0]
 
+    @property
     def y(self):
         return self.e[1]
 
+    @property
     def z(self):
         return self.e[2]
 
@@ -76,7 +79,7 @@ def dot(u, v):
     return u.e[0] * v.e[0] + u.e[1] * v.e[1] + u.e[2] * v.e[2]
 
 
-def cross(u, v):
+def cross(u, v) -> vec3:
     return vec3(
         u.e[1] * v.e[2] - u.e[2] * v.e[1],
         u.e[2] * v.e[0] - u.e[0] * v.e[2],

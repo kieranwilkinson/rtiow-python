@@ -1,11 +1,32 @@
-from raytracer.vec3 import vec3, point3, unit_vector
+from raytracer.vec3 import vec3, point3, unit_vector, dot, cross
 from raytracer.colour import write_colour, colour
 from raytracer.ray import Ray
 
+import math
+
+
+def hit_sphere(centre: point3, radius: float, ray: Ray):
+    oc = centre - ray.origin
+    a = ray.direction.length_squared()
+    h = dot(ray.direction, oc)
+    c = oc.length_squared() - radius * radius
+    discriminant = h * h - a * c
+
+    if discriminant < 0:
+        return -1.0
+    else:
+        return (h - math.sqrt(discriminant)) / a
+
 
 def ray_colour(ray: Ray) -> colour:
+    t = hit_sphere(point3(0.0, 0.0, -1.0), 0.5, ray)
+
+    if t > 0.0:
+        N = unit_vector(ray.at(t) - vec3(0.0, 0.0, -1.0))
+        return 0.5 * colour(N.x+1.0, N.y+1.0, N.z+1.0)
+
     unit_direction = unit_vector(ray.direction)
-    a = 0.5 * (unit_direction.y() + 1.0)
+    a = 0.5 * (unit_direction.y + 1.0)
     return (1.0 - a) * colour(1.0, 1.0, 1.0) + a * colour(0.5, 0.7, 1.0)
 
 
