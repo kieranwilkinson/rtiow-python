@@ -1,6 +1,6 @@
 from raytracer.hittable import Hittable, HitRecord
 from raytracer.ray import Ray
-
+from raytracer.interval import Interval
 
 class HittableList(Hittable):
     def __init__(self):
@@ -17,13 +17,13 @@ class HittableList(Hittable):
     def clear(self):
         self.hittable_list.clear()
 
-    def hit(self, ray: Ray, ray_t_min: float, ray_t_max: float, hit_record: HitRecord) -> bool:
+    def hit(self, ray: Ray, ray_t: Interval, hit_record: HitRecord) -> bool:
         temp_hit_record = HitRecord()
         hit_anything = False
-        closest_so_far = ray_t_max
+        closest_so_far = ray_t.max
 
         for hittable in self.hittable_list:
-            if hittable.hit(ray, ray_t_min, closest_so_far, temp_hit_record):
+            if hittable.hit(ray, Interval(ray_t.min, closest_so_far), temp_hit_record):
                 hit_anything = True
                 closest_so_far = temp_hit_record.t
                 hit_record.t = temp_hit_record.t

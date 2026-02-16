@@ -1,15 +1,17 @@
 from raytracer.vec3 import vec3, point3, unit_vector, dot, cross
 from raytracer.colour import write_colour, colour
 from raytracer.ray import Ray
-from raytracer.hittable import HitRecord, Hittable, Sphere
+from raytracer.hittable import HitRecord, Hittable
+from raytracer.sphere import Sphere
 from raytracer.hittable_list import HittableList
+from raytracer.interval import Interval
 from raytracer.const import INFINITY, PI, deg_to_rad
 
 import math
 
 def ray_colour(ray: Ray, world: Hittable) -> colour:
     hit_record = HitRecord()
-    if world.hit(ray, 0.0, INFINITY, hit_record):
+    if world.hit(ray, Interval(0, INFINITY), hit_record):
         return 0.5 * (hit_record.normal + colour(1.0, 1.0, 1.0))
 
     unit_direction = unit_vector(ray.direction)
