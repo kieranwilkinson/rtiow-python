@@ -1,29 +1,16 @@
 from raytracer.vec3 import vec3, point3, unit_vector, dot, cross
 from raytracer.colour import write_colour, colour
 from raytracer.ray import Ray
+from raytracer.hittable import HitRecord, Hittable, Sphere
+from raytracer.hittable_list import HittableList
+from raytracer.const import INFINITY, PI, deg_to_rad
 
 import math
 
-
-def hit_sphere(centre: point3, radius: float, ray: Ray):
-    oc = centre - ray.origin
-    a = ray.direction.length_squared()
-    h = dot(ray.direction, oc)
-    c = oc.length_squared() - radius * radius
-    discriminant = h * h - a * c
-
-    if discriminant < 0:
-        return -1.0
-    else:
-        return (h - math.sqrt(discriminant)) / a
-
-
-def ray_colour(ray: Ray) -> colour:
-    t = hit_sphere(point3(0.0, 0.0, -1.0), 0.5, ray)
-
-    if t > 0.0:
-        N = unit_vector(ray.at(t) - vec3(0.0, 0.0, -1.0))
-        return 0.5 * colour(N.x+1.0, N.y+1.0, N.z+1.0)
+def ray_colour(ray: Ray, world: Hittable) -> colour:
+    hit_record = HitRecord()
+    if world.hit(ray, 0.0, INFINITY, hit_record):
+        return 0.5 * (hit_record.normal + colour(1.0, 1.0, 1.0))
 
     unit_direction = unit_vector(ray.direction)
     a = 0.5 * (unit_direction.y + 1.0)
@@ -42,6 +29,10 @@ def ppm():
     viewport_height = 2.0
     viewport_width = viewport_height * (image_width / image_height)
     camera_centre = point3(0.0, 0.0, 0.0)
+
+    world = HittableList()
+    world.add(Sphere(point3(0.0, 0.0, -1.0), 0.5))
+    world.add(Sphere(point3(0.0, -100.5, -1.0), 100))
 
     # Calculate the vectors across the horizontal and down the vertical viewport edges.
     viewport_u = vec3(viewport_width, 0.0, 0.0)
@@ -63,6 +54,5 @@ def ppm():
                 pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v)
                 ray_direction = pixel_center - camera_centre  # type: ignore
                 ray = Ray(camera_centre, ray_direction)
-                pixel_colour = ray_colour(ray)
-
+                pixel_colour = ray_colour(ray=ray, world=world)
                 write_colour(image_ppm, pixel_colour)

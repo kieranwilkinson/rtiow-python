@@ -1,0 +1,35 @@
+from raytracer.hittable import Hittable, HitRecord
+from raytracer.ray import Ray
+
+
+class HittableList(Hittable):
+    def __init__(self):
+        super().__init__()
+
+        self.hittable_list = []
+
+    def add(self, hittable):
+        self.hittable_list.append(hittable)
+
+    def remove(self, hittable):
+        self.hittable_list.remove(hittable)
+
+    def clear(self):
+        self.hittable_list.clear()
+
+    def hit(self, ray: Ray, ray_t_min: float, ray_t_max: float, hit_record: HitRecord) -> bool:
+        temp_hit_record = HitRecord()
+        hit_anything = False
+        closest_so_far = ray_t_max
+
+        for hittable in self.hittable_list:
+            if hittable.hit(ray, ray_t_min, closest_so_far, temp_hit_record):
+                hit_anything = True
+                closest_so_far = temp_hit_record.t
+                hit_record.t = temp_hit_record.t
+                hit_record.p = temp_hit_record.p
+                hit_record.normal = temp_hit_record.normal
+                hit_record.front_face = temp_hit_record.front_face
+
+        return hit_anything
+
