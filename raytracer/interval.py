@@ -15,6 +15,9 @@ class Interval:
     def surrounds(self, x):
         return self.min < x < self.max
 
+    def clamp(self, x):
+        return max(self.min, min(x, self.max))
+
 
 Interval.empty = Interval(INFINITY, -INFINITY)
 Interval.universe = Interval(-INFINITY, INFINITY)

@@ -14,6 +14,7 @@ class Camera:
     def __init__(self, aspect_ratio, image_width):
         self.aspect_ratio = aspect_ratio
         self.image_width = image_width
+        self.samples_per_pixel = 10
 
         ih = int(self.image_width / self.aspect_ratio)
         self.image_height = ih if ih > 1 else 1
@@ -44,6 +45,8 @@ class Camera:
 
             for j in range(self.image_height):
                 for i in range(self.image_width):
+                    # pixel_colour = colour(0,0,0)
+                    # for sample in range(self.samples_per_pixel):
                     pixel_center = self.pixel00_loc + (i * self.pixel_delta_u) + (j * self.pixel_delta_v)
                     ray_direction = pixel_center - self.camera_centre  # type: ignore
                     ray = Ray(self.camera_centre, ray_direction)

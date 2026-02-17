@@ -5,11 +5,11 @@ from raytracer.hittable import HitRecord, Hittable
 from raytracer.sphere import Sphere
 from raytracer.hittable_list import HittableList
 from raytracer.interval import Interval
-from raytracer.const import INFINITY, PI, deg_to_rad
+from raytracer.const import INFINITY, PI
+from raytracer.utils import deg_to_rad, random_double
 from raytracer.camera import Camera
 
 import math
-
 
 def render_world():
     world = HittableList()
