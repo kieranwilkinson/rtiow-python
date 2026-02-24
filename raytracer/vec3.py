@@ -1,5 +1,6 @@
 import math
 
+from raytracer.utils import random_double
 
 class vec3:
     def __init__(self, e0=0.0, e1=0.0, e2=0.0):
@@ -71,6 +72,10 @@ class vec3:
     def length_squared(self):
         return self.e[0] * self.e[0] + self.e[1] * self.e[1] + self.e[2] * self.e[2]
 
+    @classmethod
+    def random(cls, min_val=0.0, max_val=1.0):
+        return cls(random_double(min_val, max_val), random_double(min_val, max_val), random_double(min_val, max_val))
+
 
 point3 = vec3
 
@@ -89,3 +94,19 @@ def cross(u, v) -> vec3:
 
 def unit_vector(v):
     return v / v.length()
+
+
+def random_unit_vector():
+    while True:
+        p = vec3.random(-1, 1)
+        lensg = p.length_squared()
+        if 1e-160 < lensg <= 1:
+            return p / math.sqrt(lensg)
+
+
+def random_on_hemisphere(normal: vec3):
+    on_unit_sphere = random_unit_vector()
+    if dot(on_unit_sphere, normal) > 0.0:
+        return on_unit_sphere
+    else:
+        return -on_unit_sphere
