@@ -2,6 +2,7 @@ import math
 
 from raytracer.utils import random_double
 
+
 class vec3:
     def __init__(self, e0=0.0, e1=0.0, e2=0.0):
         self.e = [e0, e1, e2]
@@ -72,6 +73,10 @@ class vec3:
     def length_squared(self):
         return self.e[0] * self.e[0] + self.e[1] * self.e[1] + self.e[2] * self.e[2]
 
+    def near_zero(self):
+        s = 1e-8
+        return all(math.fabs(e) < s for e in self.e)
+
     @classmethod
     def random(cls, min_val=0.0, max_val=1.0):
         return cls(random_double(min_val, max_val), random_double(min_val, max_val), random_double(min_val, max_val))
@@ -110,3 +115,7 @@ def random_on_hemisphere(normal: vec3):
         return on_unit_sphere
     else:
         return -on_unit_sphere
+
+
+def reflect(v: vec3, n: vec3) -> vec3:
+    return v - 2 * dot(v, n) * n

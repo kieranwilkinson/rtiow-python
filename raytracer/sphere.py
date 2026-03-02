@@ -8,10 +8,11 @@ from raytracer.vec3 import dot
 
 class Sphere(Hittable):
 
-    def __init__(self, center, radius):
+    def __init__(self, center, radius, material):
         super().__init__()
         self.centre = center
         self.radius = max(0.0, radius)
+        self.material = material
 
     def hit(self, ray: Ray, ray_t: Interval, hit_record: HitRecord) -> bool:
         oc = self.centre - ray.origin
@@ -38,5 +39,5 @@ class Sphere(Hittable):
 
         outward_normal = (hit_record.p - self.centre) / self.radius
         hit_record.set_face_normal(ray, outward_normal)
-
+        hit_record.material = self.material
         return True

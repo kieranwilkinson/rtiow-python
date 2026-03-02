@@ -30,6 +30,7 @@ class HittableList(Hittable):
                 hit_record.p = temp_hit_record.p
                 hit_record.normal = temp_hit_record.normal
                 hit_record.front_face = temp_hit_record.front_face
+                hit_record.material = temp_hit_record.material
 
         return hit_anything
 

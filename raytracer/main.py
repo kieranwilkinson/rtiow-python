@@ -1,3 +1,4 @@
+from raytracer.material import Lambertian, Metal
 from raytracer.vec3 import vec3, point3, unit_vector, dot, cross
 from raytracer.colour import write_colour, colour
 from raytracer.ray import Ray
@@ -13,8 +14,16 @@ import math
 
 def render_world():
     world = HittableList()
-    world.add(Sphere(point3(0.0, 0.0, -1.0), 0.5))
-    world.add(Sphere(point3(0.0, -100.5, -1.0), 100))
+
+    material_ground = Lambertian(colour(0.8, 0.8, 0.0))
+    material_centre = Lambertian(colour(0.1, 0.2, 0.5))
+    material_left = Metal(colour(0.8, 0.8, 0.8))
+    material_right = Metal(colour(0.8, 0.6, 0.2))
+
+    world.add(Sphere(point3(0.0, -100.5, -1.0), 100.0, material=material_ground))
+    world.add(Sphere(point3(0.0, 0.0, -1.2), 0.5, material=material_centre))
+    world.add(Sphere(point3(-1.0, 0.0, -1.0), 0.5, material=material_left))
+    world.add(Sphere(point3(1.0, 0.0, -1.0), 0.5, material=material_right))
 
     aspect_ratio = 16.0 / 9.0
     image_width = 600

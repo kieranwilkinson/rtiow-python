@@ -63,8 +63,8 @@ class Camera:
         hit_record = HitRecord()
 
         if world.hit(ray, Interval(0.001, INFINITY), hit_record):
-            direction = random_on_hemisphere(hit_record.normal)
-            return 0.5 * self._ray_colour(ray=Ray(hit_record.p, direction), depth=depth-1, world=world)
+            did_scatter, attenuation, scattered = hit_record.material.scatter(ray, hit_record)
+            return attenuation * self._ray_colour(ray=scattered, depth=depth - 1, world=world) if did_scatter else colour(0, 0, 0)
 
         unit_direction = unit_vector(ray.direction)
         a = 0.5 * (unit_direction.y + 1.0)
@@ -73,7 +73,7 @@ class Camera:
     def _get_ray(self, i: int, j: int):
         offset = self._sample_square()
         pixel_sample = self.pixel00_loc + ((i + offset.x) * self.pixel_delta_u) + (
-                    (j + offset.y) * self.pixel_delta_v)
+                (j + offset.y) * self.pixel_delta_v)
 
         ray_origin = self.camera_centre
         ray_direction = pixel_sample - ray_origin
