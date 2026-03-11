@@ -119,3 +119,10 @@ def random_on_hemisphere(normal: vec3):
 
 def reflect(v: vec3, n: vec3) -> vec3:
     return v - 2 * dot(v, n) * n
+
+
+def refract(uv: vec3, n: vec3, etai_over_etat: float) -> vec3:
+    cos_theta = min(dot(-uv, n), 1.0)
+    r_out_perpendicular = etai_over_etat * (uv + cos_theta * n)
+    r_out_parallel = -math.sqrt(abs(1.0 - r_out_perpendicular.length_squared())) * n
+    return r_out_perpendicular + r_out_parallel
