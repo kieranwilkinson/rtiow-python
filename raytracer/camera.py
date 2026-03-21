@@ -1,9 +1,11 @@
+import math
+
 from raytracer.hittable import Hittable, HitRecord
 from raytracer.interval import Interval
 from raytracer.const import INFINITY
 from raytracer.ray import Ray
 from raytracer.colour import write_colour, colour
-from raytracer.vec3 import vec3, unit_vector, point3, random_unit_vector, random_on_hemisphere
+from raytracer.vec3 import vec3, unit_vector, point3, random_unit_vector, random_on_hemisphere, cross
 from raytracer.utils import deg_to_rad, random_double
 
 import logging
@@ -16,35 +18,48 @@ class Camera:
     def __init__(self, aspect_ratio, image_width):
         self.aspect_ratio = aspect_ratio
         self.image_width = image_width
-        self.samples_per_pixel = 5
-        self.max_depth = 10
+        self.samples_per_pixel = 20
+        self.max_depth = 20
+        self.vertical_fov = 90
+        self.look_from = point3(0,0,0)
+        self.look_at = point3(0,0,-1)
+        self.vup = vec3(0,1,0)
 
+    def _initialize(self):
         self.pixel_sample_scale = 1.0 / self.samples_per_pixel
 
         ih = int(self.image_width / self.aspect_ratio)
         self.image_height = ih if ih > 1 else 1
 
-        self.camera_centre = point3(0.0, 0.0, 0.0)
+        self.camera_centre = self.look_from
 
         # Camera
-        self.focal_length = 1.0
-        self.viewport_height = 2.0
+        self.focal_length = (self.look_from - self.look_at).length()
+        theta = deg_to_rad(self.vertical_fov)
+        h = math.tan(theta / 2)
+        self.viewport_height = 2.0 * h * self.focal_length
         self.viewport_width = self.viewport_height * (self.image_width / self.image_height)
 
+        # Calculate the u,v,w unit basis vectors for the camera coordinate frame.
+        w = unit_vector(self.look_from - self.look_at)
+        u = unit_vector(cross(self.vup, w))
+        v = cross(w, u)
+
         # Calculate the vectors across the horizontal and down the vertical viewport edges.
-        self.viewport_u = vec3(self.viewport_width, 0.0, 0.0)
-        self.viewport_v = vec3(0.0, -self.viewport_height, 0.0)
+        self.viewport_u = self.viewport_width * u
+        self.viewport_v = self.viewport_height * -v
 
         # Calculate the horizontal and vertical delta vectors from pixel to pixel.
         self.pixel_delta_u = self.viewport_u / self.image_width
         self.pixel_delta_v = self.viewport_v / self.image_height
 
         # Calculate the location of the upper left pixel.
-        self.viewport_upper_left = self.camera_centre - vec3(0.0, 0.0, self.focal_length) - (self.viewport_u / 2) - (
-                self.viewport_v / 2)
+        self.viewport_upper_left = self.camera_centre - (self.focal_length * w) - self.viewport_u / 2 - self.viewport_v / 2
         self.pixel00_loc = self.viewport_upper_left + 0.5 * (self.pixel_delta_u + self.pixel_delta_v)
 
     def render(self, world: Hittable):
+        self._initialize()
+
         with open('image.ppm', 'w') as image_ppm:
             image_ppm.write(f"P3\n{self.image_width} {self.image_height}\n255\n")
 
