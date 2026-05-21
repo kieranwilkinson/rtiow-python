@@ -8,7 +8,7 @@ from raytracer.vec3 import dot
 
 class Sphere(Hittable):
 
-    def __init__(self, center, radius, material):
+    def __init__(self, center, radius, material) -> None:
         super().__init__()
         self.centre = center
         self.radius = max(0.0, radius)

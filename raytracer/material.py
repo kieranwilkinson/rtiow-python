@@ -1,22 +1,25 @@
 import math
 
+from abc import ABC, abstractmethod
+
 from raytracer.ray import Ray
 from raytracer.hittable import HitRecord
 from raytracer.colour import colour
 from raytracer.vec3 import vec3, random_unit_vector, reflect, unit_vector, dot, refract
 from raytracer.utils import random_double
 
-class Material:
-    def __init__(self):
+
+class Material(ABC):
+    def __init__(self) -> None:
         pass
 
+    @abstractmethod
     def scatter(self, ray_in: Ray, hit_record: HitRecord) -> tuple[bool, colour, Ray]:
         raise NotImplementedError
 
 
 class Lambertian(Material):
-
-    def __init__(self, albedo: colour):
+    def __init__(self, albedo: colour) -> None:
         super().__init__()
         self._albedo = albedo
 
@@ -31,12 +34,12 @@ class Lambertian(Material):
 
 
 class Metal(Material):
-    def __init__(self, albedo: colour, fuzz: float):
+    def __init__(self, albedo: colour, fuzz: float) -> None:
         super().__init__()
         self._albedo = albedo
         self._fuzz = fuzz if fuzz < 1 else 1
 
-    def scatter(self, ray_in: Ray, hit_record: HitRecord) -> tuple[bool, colour, Ray | vec3]:
+    def scatter(self, ray_in: Ray, hit_record: HitRecord) -> tuple[bool, colour, Ray]:
         r = reflect(ray_in.direction, hit_record.normal)
         reflected = unit_vector(r) + (self._fuzz * random_unit_vector())
         scattered = Ray(hit_record.p, reflected)
@@ -45,7 +48,7 @@ class Metal(Material):
 
 
 class Dielectric(Material):
-    def __init__(self, index_of_refraction: float):
+    def __init__(self, index_of_refraction: float) -> None:
         super().__init__()
         self._index_of_refraction = index_of_refraction
 
@@ -54,7 +57,7 @@ class Dielectric(Material):
         ri = 1.0 / self._index_of_refraction if hit_record.front_face else self._index_of_refraction
         unit_direction = unit_vector(ray_in.direction)
         cos_theta = min(dot(-unit_direction, hit_record.normal), 1.0)
-        sin_theta = math.sqrt(1.0 - cos_theta*cos_theta)
+        sin_theta = math.sqrt(1.0 - cos_theta * cos_theta)
 
         cannot_refract = ri * sin_theta > 1.0
         reflected = reflect(unit_direction, hit_record.normal)
@@ -72,4 +75,4 @@ class Dielectric(Material):
     def _reflectance(self, cosine: float):
         r0 = (1 - self._index_of_refraction) / (1 + self._index_of_refraction)
         r0 = r0 * r0
-        return r0 + (1-r0)*pow((1-cosine), 5)
+        return r0 + (1 - r0) * pow((1 - cosine), 5)

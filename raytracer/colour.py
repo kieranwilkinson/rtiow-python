@@ -6,11 +6,11 @@ from raytracer.interval import Interval
 colour = vec3
 
 
-def linear_to_gamma(linear_component: float):
+def linear_to_gamma(linear_component: float) -> float:
     return math.sqrt(linear_component) if linear_component > 0 else 0
 
 
-def write_colour(image_ppm, pixel_colour: colour):
+def write_colour(image_ppm, pixel_colour: colour) -> None:
     r = pixel_colour.x
     g = pixel_colour.y
     b = pixel_colour.z

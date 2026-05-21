@@ -6,11 +6,11 @@ class Ray:
         self._direction = direction if direction is not None else vec3()
 
     @property
-    def origin(self):
+    def origin(self) -> point3:
         return self._origin
 
     @property
-    def direction(self):
+    def direction(self) -> vec3:
         return self._direction
 
     def at(self, t: float) -> vec3:

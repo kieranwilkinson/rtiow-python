@@ -5,7 +5,7 @@ from raytracer.utils import random_double
 
 
 class vec3:
-    def __init__(self, e0=0.0, e1=0.0, e2=0.0):
+    def __init__(self, e0=0.0, e1=0.0, e2=0.0) -> None:
         self.e = [e0, e1, e2]
 
     @property
