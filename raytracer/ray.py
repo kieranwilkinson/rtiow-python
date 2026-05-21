@@ -2,7 +2,7 @@ from raytracer.vec3 import point3, vec3
 
 
 class Ray:
-    def __init__(self, origin: point3 = None, direction: vec3 = None):
+    def __init__(self, origin=None, direction=None):
         self._origin = origin if origin is not None else point3()
         self._direction = direction if direction is not None else vec3()
 
