@@ -16,7 +16,7 @@ import math
 def render_world():
     world = HittableList()
 
-    material_ground = Lambertian(colour(0.8, 0.8, 0.0))
+    material_ground = Lambertian(colour(1.0, 0.0, 0.5))
     material_centre = Lambertian(colour(0.1, 0.2, 0.5))
     material_left = Dielectric(1.5)
     material_bubble = Dielectric(1.00 / 1.5)

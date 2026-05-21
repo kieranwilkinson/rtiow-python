@@ -18,8 +18,8 @@ class Camera:
     def __init__(self, aspect_ratio, image_width):
         self.aspect_ratio = aspect_ratio
         self.image_width = image_width
-        self.samples_per_pixel = 20
-        self.max_depth = 20
+        self.samples_per_pixel = 5
+        self.max_depth = 10
         self.vertical_fov = 90
         self.look_from = point3(0,0,0)
         self.look_at = point3(0,0,-1)
