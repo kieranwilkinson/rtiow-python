@@ -15,7 +15,6 @@ def render_demo_scene():
 
     for a in range(-11, 11):
         for b in range(-11, 11):
-
             choose_material = random_double()
             centre = point3(a + 0.9 * random_double(), 0.2, b + 0.9 * random_double())
 

@@ -12,7 +12,7 @@ class HitRecord:
         normal: vec3 | None = None,
         t: float | None = None,
         front_face: bool = False,
-        material = None,
+        material=None,
     ) -> None:
         self.p = p
         self.normal = normal
