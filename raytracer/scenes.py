@@ -48,7 +48,7 @@ def render_demo_scene():
 
     camera.vertical_fov = 20
     camera.look_from = point3(13, 2, 3)
-    camera.look_at = point3(0, 0, 0)
+    camera.look_at = point3(0, 0git , 0)
     camera.vup = vec3(0, 1, 0)
 
     camera.defocus_angle = 0.6

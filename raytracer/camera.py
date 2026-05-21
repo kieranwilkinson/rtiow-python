@@ -1,4 +1,5 @@
 import math
+import pathlib
 from pathlib import Path
 
 from raytracer.colour import colour, write_colour
@@ -69,6 +70,7 @@ class Camera:
 
     def render(self, world: Hittable, output_path: Path = Path("output") / "image.ppm") -> None:
         self._initialize()
+        output_path.parent.mkdir(parents=True, exist_ok=True)
 
         with open(output_path, "w") as image_ppm:
             image_ppm.write(f"P3\n{self.image_width} {self.image_height}\n255\n")
