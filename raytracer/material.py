@@ -1,18 +1,14 @@
 import math
-
 from abc import ABC, abstractmethod
 
-from raytracer.ray import Ray
-from raytracer.hittable import HitRecord
 from raytracer.colour import colour
-from raytracer.vec3 import vec3, random_unit_vector, reflect, unit_vector, dot, refract
+from raytracer.hittable import HitRecord
+from raytracer.ray import Ray
 from raytracer.utils import random_double
+from raytracer.vec3 import dot, random_unit_vector, reflect, refract, unit_vector
 
 
 class Material(ABC):
-    def __init__(self) -> None:
-        pass
-
     @abstractmethod
     def scatter(self, ray_in: Ray, hit_record: HitRecord) -> tuple[bool, colour, Ray]:
         raise NotImplementedError
@@ -20,7 +16,6 @@ class Material(ABC):
 
 class Lambertian(Material):
     def __init__(self, albedo: colour) -> None:
-        super().__init__()
         self._albedo = albedo
 
     def scatter(self, ray_in: Ray, hit_record: HitRecord) -> tuple[bool, colour, Ray]:
@@ -35,7 +30,6 @@ class Lambertian(Material):
 
 class Metal(Material):
     def __init__(self, albedo: colour, fuzz: float) -> None:
-        super().__init__()
         self._albedo = albedo
         self._fuzz = fuzz if fuzz < 1 else 1
 
@@ -43,13 +37,12 @@ class Metal(Material):
         r = reflect(ray_in.direction, hit_record.normal)
         reflected = unit_vector(r) + (self._fuzz * random_unit_vector())
         scattered = Ray(hit_record.p, reflected)
-        did_scatter = (dot(scattered.direction, hit_record.normal) > 0)
+        did_scatter = dot(scattered.direction, hit_record.normal) > 0
         return did_scatter, self._albedo, scattered
 
 
 class Dielectric(Material):
     def __init__(self, index_of_refraction: float) -> None:
-        super().__init__()
         self._index_of_refraction = index_of_refraction
 
     def scatter(self, ray_in: Ray, hit_record: HitRecord) -> tuple[bool, colour, Ray]:

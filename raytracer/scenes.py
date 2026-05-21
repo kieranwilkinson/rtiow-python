@@ -1,16 +1,10 @@
-from raytracer.material import Lambertian, Metal, Dielectric
-from raytracer.vec3 import vec3, point3, unit_vector, dot, cross
-from raytracer.colour import write_colour, colour
-from raytracer.ray import Ray
-from raytracer.hittable import HitRecord, Hittable
-from raytracer.sphere import Sphere
-from raytracer.hittable_list import HittableList
-from raytracer.interval import Interval
-from raytracer.const import INFINITY, PI
-from raytracer.utils import deg_to_rad, random_double
-from raytracer.camera import Camera
 
-import math
+from raytracer.camera import Camera
+from raytracer.colour import colour
+from raytracer.hittable_list import HittableList
+from raytracer.material import Dielectric, Lambertian, Metal
+from raytracer.sphere import Sphere
+from raytracer.vec3 import point3, vec3
 
 
 def render_demo_scene():
@@ -33,9 +27,9 @@ def render_demo_scene():
 
     camera = Camera(aspect_ratio, image_width)
     camera.vertical_fov = 35
-    camera.look_from = point3(-2,2,1)
-    camera.look_at = point3(0,0,-1)
-    camera.vup = vec3(0,1,0)
+    camera.look_from = point3(-2, 2, 1)
+    camera.look_at = point3(0, 0, -1)
+    camera.vup = vec3(0, 1, 0)
     camera.defocus_angle = 10
     camera.focal_distance = 3.4
     camera.render(world)

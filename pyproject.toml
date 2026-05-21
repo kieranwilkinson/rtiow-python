@@ -7,3 +7,26 @@ dependencies = []
 
 [project.scripts]
 raytracer = "raytracer.__main__:main"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.14",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "I",    # import sorting
+    "B",    # flake8-bugbear
+    "UP",   # pyupgrade
+    "SIM",  # flake8-simplify
+    "RUF",  # Ruff-specific rules
+    "RET", # flake8-return
+]
+ignore = []
+

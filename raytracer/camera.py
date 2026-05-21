@@ -1,24 +1,16 @@
 import math
-
 from pathlib import Path
 
-from raytracer.hittable import Hittable, HitRecord
-from raytracer.interval import Interval
+from raytracer.colour import colour, write_colour
 from raytracer.const import INFINITY
+from raytracer.hittable import HitRecord, Hittable
+from raytracer.interval import Interval
 from raytracer.ray import Ray
-from raytracer.colour import write_colour, colour
-from raytracer.vec3 import (
-    vec3,
-    unit_vector,
-    point3,
-    cross,
-    random_in_unit_disk
-)
 from raytracer.utils import deg_to_rad, random_double
+from raytracer.vec3 import cross, point3, random_in_unit_disk, unit_vector, vec3
 
 
 class Camera:
-
     def __init__(self, aspect_ratio, image_width):
         self.aspect_ratio = aspect_ratio
         self.image_width = image_width
@@ -60,9 +52,15 @@ class Camera:
         self.pixel_delta_v = self.viewport_v / self.image_height
 
         # Calculate the location of the upper left pixel.
-        self.viewport_upper_left = self.camera_centre - (
-                    self.focal_distance * w) - self.viewport_u / 2 - self.viewport_v / 2
-        self.pixel00_loc = self.viewport_upper_left + 0.5 * (self.pixel_delta_u + self.pixel_delta_v)
+        self.viewport_upper_left = (
+            self.camera_centre
+            - (self.focal_distance * w)
+            - self.viewport_u / 2
+            - self.viewport_v / 2
+        )
+        self.pixel00_loc = self.viewport_upper_left + 0.5 * (
+            self.pixel_delta_u + self.pixel_delta_v
+        )
 
         # Calculate the camera defocus disk basis vectors.
         self.defocus_radius = self.focal_distance * math.tan(deg_to_rad(self.defocus_angle) / 2)
@@ -72,13 +70,13 @@ class Camera:
     def render(self, world: Hittable, output_path: Path = Path("output") / "image.ppm") -> None:
         self._initialize()
 
-        with open(output_path, 'w') as image_ppm:
+        with open(output_path, "w") as image_ppm:
             image_ppm.write(f"P3\n{self.image_width} {self.image_height}\n255\n")
 
             for j in range(self.image_height):
                 for i in range(self.image_width):
                     pixel_colour = colour(0, 0, 0)
-                    for sample in range(self.samples_per_pixel):
+                    for _sample in range(self.samples_per_pixel):
                         r = self._get_ray(i, j)
                         pixel_colour += self._ray_colour(ray=r, depth=self.max_depth, world=world)
                     write_colour(image_ppm, self.pixel_sample_scale * pixel_colour)
@@ -91,8 +89,11 @@ class Camera:
 
         if world.hit(ray, Interval(0.001, INFINITY), hit_record):
             did_scatter, attenuation, scattered = hit_record.material.scatter(ray, hit_record)
-            return attenuation * self._ray_colour(ray=scattered, depth=depth - 1,
-                                                  world=world) if did_scatter else colour(0, 0, 0)
+            return (
+                attenuation * self._ray_colour(ray=scattered, depth=depth - 1, world=world)
+                if did_scatter
+                else colour(0, 0, 0)
+            )
 
         unit_direction = unit_vector(ray.direction)
         a = 0.5 * (unit_direction.y + 1.0)
@@ -104,9 +105,9 @@ class Camera:
 
         offset = self._sample_square()
         pixel_sample = (
-                self.pixel00_loc
-                + ((i + offset.x) * self.pixel_delta_u)
-                + ((j + offset.y) * self.pixel_delta_v)
+            self.pixel00_loc
+            + ((i + offset.x) * self.pixel_delta_u)
+            + ((j + offset.y) * self.pixel_delta_v)
         )
 
         ray_origin = self.camera_centre if self.defocus_angle <= 0 else self.defocus_disk_sample()

@@ -1,7 +1,7 @@
 import math
 
-from raytracer.vec3 import vec3
 from raytracer.interval import Interval
+from raytracer.vec3 import vec3
 
 colour = vec3
 

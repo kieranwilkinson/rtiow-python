@@ -1,6 +1,6 @@
-from raytracer.hittable import Hittable, HitRecord
-from raytracer.ray import Ray
+from raytracer.hittable import HitRecord, Hittable
 from raytracer.interval import Interval
+from raytracer.ray import Ray
 
 
 class HittableList(Hittable):

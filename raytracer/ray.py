@@ -1,4 +1,5 @@
-from raytracer.vec3 import vec3, point3
+from raytracer.vec3 import point3, vec3
+
 
 class Ray:
     def __init__(self, origin=None, direction=None):

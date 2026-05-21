@@ -1,17 +1,18 @@
 from abc import ABC, abstractmethod
 
-from raytracer.vec3 import vec3, point3, dot
-from raytracer.ray import Ray
 from raytracer.interval import Interval
+from raytracer.ray import Ray
+from raytracer.vec3 import dot, point3, vec3
+
 
 class HitRecord:
     def __init__(
-            self,
-            p: point3 = None,
-            normal: vec3 = None,
-            t: float = None,
-            front_face: bool = False,
-            material = None
+        self,
+        p: point3 | None = None,
+        normal: vec3 | None = None,
+        t: float | None = None,
+        front_face: bool = False,
+        material = None,
     ) -> None:
         self.p = p
         self.normal = normal
@@ -25,9 +26,6 @@ class HitRecord:
 
 
 class Hittable(ABC):
-    def __init__(self) -> None:
-        pass
-
     @abstractmethod
     def hit(self, ray: Ray, interval: Interval, hit_record: HitRecord) -> bool:
         raise NotImplementedError

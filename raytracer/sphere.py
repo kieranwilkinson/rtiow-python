@@ -1,15 +1,13 @@
 import math
 
-from raytracer.hittable import Hittable, HitRecord
+from raytracer.hittable import HitRecord, Hittable
 from raytracer.interval import Interval
 from raytracer.ray import Ray
 from raytracer.vec3 import dot
 
 
 class Sphere(Hittable):
-
     def __init__(self, center, radius, material) -> None:
-        super().__init__()
         self.centre = center
         self.radius = max(0.0, radius)
         self.material = material

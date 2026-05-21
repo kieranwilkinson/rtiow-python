@@ -1,6 +1,6 @@
-from raytracer.const import PI
-
 import random
+
+from raytracer.const import PI
 
 
 def deg_to_rad(degrees) -> float:

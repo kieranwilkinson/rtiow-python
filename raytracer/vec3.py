@@ -1,5 +1,4 @@
 import math
-from typing import TypeAlias
 
 from raytracer.utils import random_double
 
@@ -29,7 +28,7 @@ class vec3:
     def __neg__(self):
         return vec3(-self.e[0], -self.e[1], -self.e[2])
 
-    def __add__(self, v) -> 'vec3':
+    def __add__(self, v) -> "vec3":
         return vec3(self.e[0] + v.e[0], self.e[1] + v.e[1], self.e[2] + v.e[2])
 
     def __iadd__(self, v: "vec3") -> "vec3":
@@ -78,7 +77,7 @@ class vec3:
         return all(math.fabs(e) < 1e-8 for e in self.e)
 
     @classmethod
-    def random(cls, min_val: float = 0.0, max_val: float = 1.0) -> 'vec3':
+    def random(cls, min_val: float = 0.0, max_val: float = 1.0) -> "vec3":
         return cls(
             random_double(min_val, max_val),
             random_double(min_val, max_val),
@@ -86,7 +85,7 @@ class vec3:
         )
 
 
-point3: TypeAlias = vec3
+point3 = vec3
 
 
 def dot(u: vec3, v: vec3) -> float:
@@ -97,7 +96,7 @@ def cross(u: vec3, v: vec3) -> vec3:
     return vec3(
         u.e[1] * v.e[2] - u.e[2] * v.e[1],
         u.e[2] * v.e[0] - u.e[0] * v.e[2],
-        u.e[0] * v.e[1] - u.e[1] * v.e[0]
+        u.e[0] * v.e[1] - u.e[1] * v.e[0],
     )
 
 
