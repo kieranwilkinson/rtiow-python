@@ -2,9 +2,9 @@ from raytracer.const import INFINITY
 
 
 class Interval:
-    def __init__(self, min=INFINITY, max=-INFINITY) -> None:
-        self.min = min
-        self.max = max
+    def __init__(self, min_interval: float = INFINITY, max_interval: float = -INFINITY) -> None:
+        self.min = min_interval
+        self.max = max_interval
 
     def size(self) -> float:
         return self.max - self.min

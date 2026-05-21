@@ -1,4 +1,6 @@
 import math
+import sys
+import time
 from pathlib import Path
 
 from raytracer.colour import colour, write_colour
@@ -11,7 +13,7 @@ from raytracer.vec3 import cross, point3, random_in_unit_disk, unit_vector, vec3
 
 
 class Camera:
-    def __init__(self, aspect_ratio, image_width):
+    def __init__(self, aspect_ratio: float, image_width: int) -> None:
         self.aspect_ratio = aspect_ratio
         self.image_width = image_width
         self.samples_per_pixel = 5
@@ -80,6 +82,7 @@ class Camera:
                         r = self._get_ray(i, j)
                         pixel_colour += self._ray_colour(ray=r, depth=self.max_depth, world=world)
                     write_colour(image_ppm, self.pixel_sample_scale * pixel_colour)
+                    print(f"{j=}, {i=}")
 
     def _ray_colour(self, ray: Ray, depth: int, world: Hittable) -> colour:
         if depth <= 0:
@@ -102,7 +105,6 @@ class Camera:
     def _get_ray(self, i: int, j: int) -> Ray:
         # Construct a camera ray originating from the defocus disk and directed at a randomly
         # sampled point around the pixel location i, j.
-
         offset = self._sample_square()
         pixel_sample = (
             self.pixel00_loc

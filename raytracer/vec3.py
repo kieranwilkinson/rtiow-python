@@ -1,3 +1,5 @@
+
+
 import math
 
 from raytracer.utils import random_double

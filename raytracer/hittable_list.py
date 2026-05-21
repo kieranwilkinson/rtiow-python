@@ -7,7 +7,7 @@ class HittableList(Hittable):
     def __init__(self) -> None:
         super().__init__()
 
-        self.hittable_list = []
+        self.hittable_list: list[Hittable] = []
 
     def add(self, hittable) -> None:
         self.hittable_list.append(hittable)
