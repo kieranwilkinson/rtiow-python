@@ -42,7 +42,7 @@ def render_demo_scene():
     material_metal = Metal(colour(0.7, 0.6, 0.5), 0.0)
     world.add(Sphere(point3(4, 1, 0), 1.0, material_metal))
 
-    camera = Camera(16.0 / 9.0, 720)
+    camera = Camera(16.0 / 9.0, 480)
     camera.samples_per_pixel = 10
     camera.max_depth = 10
 
