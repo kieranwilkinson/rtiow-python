@@ -2,11 +2,23 @@
 name = "rtiow-python"
 version = "0.1.0"
 description = "A small path tracer written in Python, inspired by Ray Tracing in One Weekend."
+readme = "README.md"
+license = "MIT"
 requires-python = ">=3.12"
 dependencies = []
 
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["raytracer*"]
+
 [project.scripts]
 raytracer = "raytracer.__main__:main"
+
+[tool.uv]
+package = true
 
 [dependency-groups]
 dev = [
@@ -29,4 +41,3 @@ select = [
     "RET", # flake8-return
 ]
 ignore = []
-

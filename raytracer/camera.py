@@ -1,6 +1,5 @@
 import math
 import pathlib
-from pathlib import Path
 
 from raytracer.colour import colour, write_colour
 from raytracer.const import INFINITY
@@ -33,7 +32,6 @@ class Camera:
         self.camera_centre = self.look_from
 
         # Camera
-        self.focal_length = (self.look_from - self.look_at).length()
         theta = deg_to_rad(self.vertical_fov)
         h = math.tan(theta / 2)
         self.viewport_height = 2.0 * h * self.focal_distance
@@ -68,7 +66,7 @@ class Camera:
         self.defocus_disk_u = self.defocus_radius * u
         self.defocus_disk_v = self.defocus_radius * v
 
-    def render(self, world: Hittable, output_path: Path = Path("output") / "image.ppm") -> None:
+    def render(self, world: Hittable, output_path: pathlib.Path = pathlib.Path("output") / "image.ppm") -> None:
         self._initialize()
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -82,7 +80,6 @@ class Camera:
                         r = self._get_ray(i, j)
                         pixel_colour += self._ray_colour(ray=r, depth=self.max_depth, world=world)
                     write_colour(image_ppm, self.pixel_sample_scale * pixel_colour)
-                    print(f"{j=}, {i=}")
 
     def _ray_colour(self, ray: Ray, depth: int, world: Hittable) -> colour:
         if depth <= 0:
